@@ -1,5 +1,7 @@
 package br.com.fullcycle.hexagonal.application.usecases;
 
+import java.util.Objects;
+
 import br.com.fullcycle.hexagonal.application.UseCase;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase.Input;
@@ -10,8 +12,8 @@ import br.com.fullcycle.hexagonal.services.CustomerService;
 public class CreateCustomerUseCase extends UseCase<Input, Output> {
 	private final CustomerService customerService;
 
-	public CreateCustomerUseCase(CustomerService customerService) {
-		this.customerService = customerService;
+	public CreateCustomerUseCase(final CustomerService customerService) {
+		this.customerService = Objects.requireNonNull(customerService);
 	}
 
 	@Override
