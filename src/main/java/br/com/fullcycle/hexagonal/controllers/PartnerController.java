@@ -1,7 +1,10 @@
 package br.com.fullcycle.hexagonal.controllers;
 
-import java.net.URI;
-
+import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
+import br.com.fullcycle.hexagonal.application.usecases.CreatePartnerUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.GetPartnerByIdUseCase;
+import br.com.fullcycle.hexagonal.dtos.PartnerDTO;
+import br.com.fullcycle.hexagonal.services.PartnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.application.usecases.CreatePartnerUseCase;
-import br.com.fullcycle.hexagonal.application.usecases.GetPartnerByIdUseCase;
-import br.com.fullcycle.hexagonal.dtos.PartnerDTO;
-import br.com.fullcycle.hexagonal.services.PartnerService;
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "partners")
@@ -28,8 +27,7 @@ public class PartnerController {
 	public ResponseEntity<?> create(@RequestBody PartnerDTO dto) {
 		try {
 			final var useCase = new CreatePartnerUseCase(partnerService);
-			final var output = useCase
-					.execute(new CreatePartnerUseCase.Input(dto.getCnpj(), dto.getEmail(), dto.getName()));
+			final var output = useCase.execute(new CreatePartnerUseCase.Input(dto.getCnpj(), dto.getEmail(), dto.getName()));
 
 			return ResponseEntity.created(URI.create("/partners/" + output.id())).body(output);
 
