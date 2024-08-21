@@ -1,7 +1,7 @@
 package br.com.fullcycle.hexagonal.infraestructure.controllers;
 
-import br.com.fullcycle.hexagonal.infraestructure.dtos.EventDTO;
-import br.com.fullcycle.hexagonal.infraestructure.dtos.PartnerDTO;
+import br.com.fullcycle.hexagonal.application.usecases.CreateEventUseCase;
+import br.com.fullcycle.hexagonal.infraestructure.dtos.NewEventDTO;
 import br.com.fullcycle.hexagonal.infraestructure.dtos.SubscribeDTO;
 import br.com.fullcycle.hexagonal.infraestructure.models.Customer;
 import br.com.fullcycle.hexagonal.infraestructure.models.Partner;
@@ -9,7 +9,11 @@ import br.com.fullcycle.hexagonal.infraestructure.repositories.CustomerRepositor
 import br.com.fullcycle.hexagonal.infraestructure.repositories.EventRepository;
 import br.com.fullcycle.hexagonal.infraestructure.repositories.PartnerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,11 +64,7 @@ class EventControllerTest {
     @DisplayName("Deve criar um evento")
     public void testCreate() throws Exception {
 
-        var event = new EventDTO();
-        event.setDate("2021-01-01");
-        event.setName("Disney on Ice");
-        event.setTotalSpots(100);
-        event.setPartner(new PartnerDTO(disney.getId()));
+        var event = new NewEventDTO("Disney on Ice", "2021-01-01", 100, disney.getId());
 
         final var result = this.mvc.perform(
                         MockMvcRequestBuilders.post("/events")
@@ -75,10 +75,10 @@ class EventControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andReturn().getResponse().getContentAsByteArray();
 
-        var actualResponse = mapper.readValue(result, EventDTO.class);
-        Assertions.assertEquals(event.getDate(), actualResponse.getDate());
-        Assertions.assertEquals(event.getTotalSpots(), actualResponse.getTotalSpots());
-        Assertions.assertEquals(event.getName(), actualResponse.getName());
+        var actualResponse = mapper.readValue(result, NewEventDTO.class);
+        Assertions.assertEquals(event.date(), actualResponse.date());
+        Assertions.assertEquals(event.totalSpots(), actualResponse.totalSpots());
+        Assertions.assertEquals(event.name(), actualResponse.name());
     }
 
     @Test
@@ -86,11 +86,7 @@ class EventControllerTest {
     @DisplayName("Deve comprar um ticket de um evento")
     public void testReserveTicket() throws Exception {
 
-        var event = new EventDTO();
-        event.setDate("2021-01-01");
-        event.setName("Disney on Ice");
-        event.setTotalSpots(100);
-        event.setPartner(new PartnerDTO(disney.getId()));
+        var event = new NewEventDTO("Disney on Ice", "2021-01-01", 100, disney.getId());
 
         final var createResult = this.mvc.perform(
                         MockMvcRequestBuilders.post("/events")
@@ -101,10 +97,9 @@ class EventControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andReturn().getResponse().getContentAsByteArray();
 
-        var eventId = mapper.readValue(createResult, EventDTO.class).getId();
+        var eventId = mapper.readValue(createResult, CreateEventUseCase.Output.class).id();
 
-        var sub = new SubscribeDTO();
-        sub.setCustomerId(johnDoe.getId());
+        var sub = new SubscribeDTO(johnDoe.getId());
 
         this.mvc.perform(
                         MockMvcRequestBuilders.post("/events/{id}/subscribe", eventId)

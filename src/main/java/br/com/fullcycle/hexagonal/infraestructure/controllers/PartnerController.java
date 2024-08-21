@@ -4,8 +4,6 @@ import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreatePartnerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.GetPartnerByIdUseCase;
 import br.com.fullcycle.hexagonal.infraestructure.dtos.PartnerDTO;
-import br.com.fullcycle.hexagonal.infraestructure.services.PartnerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,19 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "partners")
 public class PartnerController {
 
-	@Autowired
-	private PartnerService partnerService;
+	private final CreatePartnerUseCase createPartnerUseCase;
+	private final GetPartnerByIdUseCase getPartnerByIdUseCase;
+
+	public PartnerController(final CreatePartnerUseCase createPartnerUseCase, final GetPartnerByIdUseCase getPartnerByIdUseCase) {
+		this.createPartnerUseCase = Objects.requireNonNull(createPartnerUseCase);
+		this.getPartnerByIdUseCase = Objects.requireNonNull(getPartnerByIdUseCase);
+	}
 
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody PartnerDTO dto) {
 		try {
-			final var useCase = new CreatePartnerUseCase(partnerService);
-			final var output = useCase.execute(new CreatePartnerUseCase.Input(dto.getCnpj(), dto.getEmail(), dto.getName()));
+			final var output = createPartnerUseCase.execute(
+					new CreatePartnerUseCase.Input(dto.getCnpj(), dto.getEmail(), dto.getName()));
 
 			return ResponseEntity.created(URI.create("/partners/" + output.id())).body(output);
 
@@ -38,8 +42,7 @@ public class PartnerController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> get(@PathVariable Long id) {
-		final var useCase = new GetPartnerByIdUseCase(partnerService);
-		return useCase.execute(new GetPartnerByIdUseCase.Input(id)).map(ResponseEntity::ok)
+		return getPartnerByIdUseCase.execute(new GetPartnerByIdUseCase.Input(id)).map(ResponseEntity::ok)
 				.orElseGet(ResponseEntity.notFound()::build);
 	}
 

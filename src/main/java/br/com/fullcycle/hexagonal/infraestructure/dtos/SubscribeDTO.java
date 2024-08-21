@@ -1,14 +1,5 @@
 package br.com.fullcycle.hexagonal.infraestructure.dtos;
 
-public class SubscribeDTO {
+public record SubscribeDTO(Long customerId) {
 
-    private Long customerId;
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
 }
