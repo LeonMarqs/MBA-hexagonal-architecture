@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.models.Partner;
-import br.com.fullcycle.hexagonal.services.PartnerService;
+import br.com.fullcycle.hexagonal.infraestructure.models.Partner;
+import br.com.fullcycle.hexagonal.infraestructure.services.PartnerService;
 
 public class CreatePartnerUseCaseTest {
 	@Test
@@ -28,15 +28,15 @@ public class CreatePartnerUseCaseTest {
 				expectedName);
 
 		// when
-		final var customerService = Mockito.mock(PartnerService.class);
-		when(customerService.findByCnpj(expectedCNPJ)).thenReturn(Optional.empty());
-		when(customerService.findByEmail(expectedEmail)).thenReturn(Optional.empty());
-		when(customerService.save(any())).then(a -> {
-			var customer = a.getArgument(0, Partner.class);
-			customer.setId(UUID.randomUUID().getMostSignificantBits());
-			return customer;
+		final var partnerService = Mockito.mock(PartnerService.class);
+		when(partnerService.findByCnpj(expectedCNPJ)).thenReturn(Optional.empty());
+		when(partnerService.findByEmail(expectedEmail)).thenReturn(Optional.empty());
+		when(partnerService.save(any())).then(a -> {
+			var partner = a.getArgument(0, Partner.class);
+			partner.setId(UUID.randomUUID().getMostSignificantBits());
+			return partner;
 		});
-		final var useCase = new CreatePartnerUseCase(customerService);
+		final var useCase = new CreatePartnerUseCase(partnerService);
 		final var output = useCase.execute(createInput);
 
 		// then

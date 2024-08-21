@@ -6,8 +6,8 @@ import br.com.fullcycle.hexagonal.application.UseCase;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase.Input;
 import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase.Output;
-import br.com.fullcycle.hexagonal.models.Customer;
-import br.com.fullcycle.hexagonal.services.CustomerService;
+import br.com.fullcycle.hexagonal.infraestructure.models.Customer;
+import br.com.fullcycle.hexagonal.infraestructure.services.CustomerService;
 
 public class CreateCustomerUseCase extends UseCase<Input, Output> {
 	private final CustomerService customerService;

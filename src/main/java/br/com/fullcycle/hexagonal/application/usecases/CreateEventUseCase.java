@@ -2,9 +2,9 @@ package br.com.fullcycle.hexagonal.application.usecases;
 
 import br.com.fullcycle.hexagonal.application.UseCase;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.models.Event;
-import br.com.fullcycle.hexagonal.services.EventService;
-import br.com.fullcycle.hexagonal.services.PartnerService;
+import br.com.fullcycle.hexagonal.infraestructure.models.Event;
+import br.com.fullcycle.hexagonal.infraestructure.services.EventService;
+import br.com.fullcycle.hexagonal.infraestructure.services.PartnerService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -40,7 +40,7 @@ public class CreateEventUseCase extends UseCase<CreateEventUseCase.Input, Create
 
 	}
 
-	public record Output(Long id, String date, String name, Integer totalSposts, Long partnerId) {
+	public record Output(Long id, String date, String name, Integer totalSpots, Long partnerId) {
 
 	}
 

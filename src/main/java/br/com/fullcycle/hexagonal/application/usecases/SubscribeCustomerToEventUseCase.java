@@ -2,10 +2,10 @@ package br.com.fullcycle.hexagonal.application.usecases;
 
 import br.com.fullcycle.hexagonal.application.UseCase;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.models.Ticket;
-import br.com.fullcycle.hexagonal.models.TicketStatus;
-import br.com.fullcycle.hexagonal.services.CustomerService;
-import br.com.fullcycle.hexagonal.services.EventService;
+import br.com.fullcycle.hexagonal.infraestructure.models.Ticket;
+import br.com.fullcycle.hexagonal.infraestructure.models.TicketStatus;
+import br.com.fullcycle.hexagonal.infraestructure.services.CustomerService;
+import br.com.fullcycle.hexagonal.infraestructure.services.EventService;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class SubscribeCustomerToEventUseCase
 		return new Output(event.getId(), ticket.getStatus().name(), ticket.getReservedAt());
 	}
 
-	public record Input(Long eventId, Long customerId) {
+	public record Input(Long customerId, Long eventId) {
 
 	}
 
