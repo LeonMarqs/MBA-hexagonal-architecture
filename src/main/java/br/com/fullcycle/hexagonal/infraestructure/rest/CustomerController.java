@@ -1,9 +1,9 @@
-package br.com.fullcycle.hexagonal.infraestructure.controllers;
+package br.com.fullcycle.hexagonal.infraestructure.rest;
 
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.GetCustomerByIdUseCase;
-import br.com.fullcycle.hexagonal.infraestructure.dtos.CustomerDTO;
+import br.com.fullcycle.hexagonal.infraestructure.dtos.NewCustomerDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +30,11 @@ public class CustomerController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody CustomerDTO dto) {
+	public ResponseEntity<?> create(@RequestBody NewCustomerDTO dto) {
 
 		try {
 			final var output = createCustomerUseCase.execute(
-					new CreateCustomerUseCase.Input(dto.getCpf(), dto.getEmail(), dto.getName()));
+					new CreateCustomerUseCase.Input(dto.cpf(), dto.email(), dto.name()));
 
 			return ResponseEntity.created(URI.create("/customers/" + output.id())).body(output);
 
