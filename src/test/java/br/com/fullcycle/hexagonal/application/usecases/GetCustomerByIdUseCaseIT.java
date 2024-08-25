@@ -3,14 +3,12 @@ package br.com.fullcycle.hexagonal.application.usecases;
 import br.com.fullcycle.hexagonal.IntegrationTest;
 import br.com.fullcycle.hexagonal.infraestructure.models.Customer;
 import br.com.fullcycle.hexagonal.infraestructure.repositories.CustomerRepository;
-import org.junit.jupiter.api.AfterEach;
+import io.hypersistence.tsid.TSID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.UUID;
 
 class GetCustomerByIdUseCaseIT extends IntegrationTest {
 
@@ -35,7 +33,7 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 
 		final var customer = createCustomer();
 
-		final GetCustomerByIdUseCase.Input getByIdInput = new GetCustomerByIdUseCase.Input(customer.getId());
+		final GetCustomerByIdUseCase.Input getByIdInput = new GetCustomerByIdUseCase.Input(customer.getId().toString());
 
 		// when
 		final var output = useCase.execute(getByIdInput).get();
@@ -51,7 +49,7 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 	@DisplayName("Deve obter vazio ao buscar por id inválido")
 	public void testGetCustomerByIdWithInvalidId() {
 		// given
-		final Long expectedId = UUID.randomUUID().getMostSignificantBits();
+		final String expectedId = TSID.fast().toString();
 
 		final GetCustomerByIdUseCase.Input getByIdInput = new GetCustomerByIdUseCase.Input(expectedId);
 

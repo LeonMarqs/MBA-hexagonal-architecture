@@ -33,8 +33,7 @@ public class CustomerController {
 	public ResponseEntity<?> create(@RequestBody NewCustomerDTO dto) {
 
 		try {
-			final var output = createCustomerUseCase.execute(
-					new CreateCustomerUseCase.Input(dto.cpf(), dto.email(), dto.name()));
+			final var output = createCustomerUseCase.execute(new CreateCustomerUseCase.Input(dto.cpf(), dto.email(), dto.name()));
 
 			return ResponseEntity.created(URI.create("/customers/" + output.id())).body(output);
 
@@ -44,7 +43,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> get(@PathVariable Long id) {
+	public ResponseEntity<?> get(@PathVariable String id) {
 		return getCustomerByIdUseCase.execute(new GetCustomerByIdUseCase.Input(id)).map(ResponseEntity::ok)
 				.orElseGet(ResponseEntity.notFound()::build);
 	}
