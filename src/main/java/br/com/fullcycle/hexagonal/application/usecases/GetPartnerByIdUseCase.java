@@ -1,30 +1,33 @@
 package br.com.fullcycle.hexagonal.application.usecases;
 
+import br.com.fullcycle.hexagonal.application.UseCase;
+import br.com.fullcycle.hexagonal.application.domain.partner.PartnerId;
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
+
 import java.util.Objects;
 import java.util.Optional;
 
-import br.com.fullcycle.hexagonal.application.UseCase;
-import br.com.fullcycle.hexagonal.infraestructure.services.PartnerService;
+public class GetPartnerByIdUseCase extends UseCase<GetPartnerByIdUseCase.Input, Optional<GetPartnerByIdUseCase.Output>> {
 
-public class GetPartnerByIdUseCase
-		extends UseCase<GetPartnerByIdUseCase.Input, Optional<GetPartnerByIdUseCase.Output>> {
+	private final PartnerRepository partnerRepository;
 
-	private final PartnerService partnerService;
-
-	public GetPartnerByIdUseCase(final PartnerService partnerService) {
-		this.partnerService = Objects.requireNonNull(partnerService);
+	public GetPartnerByIdUseCase(final PartnerRepository partnerRepository) {
+		this.partnerRepository = Objects.requireNonNull(partnerRepository);
 	}
 
 	@Override
 	public Optional<Output> execute(final Input input) {
-		return this.partnerService.findById(input.id)
-				.map(c -> new Output(c.getId(), c.getCnpj(), c.getEmail(), c.getName()));
+		return this.partnerRepository.partnerOfId(PartnerId.with(input.id))
+				.map(c -> new Output(c.partnerId().value(), c.cnpj().value(), c.email().value(), c.name().value()));
 
 	}
 
-	public record Input(Long id) {
-	};
+	public record Input(String id) {
 
-	public record Output(Long id, String cnpj, String email, String name) {
 	}
+
+	public record Output(String id, String cnpj, String email, String name) {
+
+	}
+
 }

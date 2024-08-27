@@ -1,14 +1,11 @@
 package br.com.fullcycle.hexagonal.application.usecases;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
+import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
+import br.com.fullcycle.hexagonal.application.domain.partner.PartnerId;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.infraestructure.models.Partner;
-import br.com.fullcycle.hexagonal.infraestructure.repositories.EventRepository;
-import br.com.fullcycle.hexagonal.infraestructure.repositories.PartnerRepository;
-import br.com.fullcycle.hexagonal.infraestructure.services.EventService;
-import br.com.fullcycle.hexagonal.infraestructure.services.PartnerService;
-import io.hypersistence.tsid.TSID;
-import org.junit.jupiter.api.AfterEach;
+import br.com.fullcycle.hexagonal.application.repositories.EventRepository;
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,37 +15,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 class CreateEventUseCaseIT extends IntegrationTest {
 
 	@Autowired
-	private EventService eventService;
-
-	@Autowired
-	private PartnerRepository partnerRepository;
-
-	@Autowired
-	private PartnerService partnerService;
-
-	@Autowired
 	private CreateEventUseCase useCase;
 
 	@Autowired
 	private EventRepository eventRepository;
 
+	@Autowired
+	private PartnerRepository partnerRepository;
+
 	@BeforeEach
-	@AfterEach
-	void tearDown() {
+	void setUp() {
 		eventRepository.deleteAll();
 		partnerRepository.deleteAll();
 	}
 
 	@Test
 	@DisplayName("Deve criar um evento")
-	public void testCreateEvent() {
+	public void testCreate() {
 		// given
-		final var expectedName = "Disney on Ice";
-		final var expectedDate = "2021-01-01";
-		final var expectedTotalSpots = 100;
-
 		final var partner = createPartner();
-		final var expectedPartnerId = partner.getId();
+		final var expectedDate = "2021-01-01";
+		final var expectedName = "Disney on Ice";
+		final var expectedTotalSpots = 10;
+		final var expectedPartnerId = partner.partnerId().value();
 
 		final var createInput = new CreateEventUseCase.Input(expectedDate, expectedName, expectedPartnerId, expectedTotalSpots);
 
@@ -65,18 +54,17 @@ class CreateEventUseCaseIT extends IntegrationTest {
 
 	@Test
 	@DisplayName("Não deve criar um evento quando o Partner não for encontrado")
-	public void testCreateEvent_whenPartnerNotFoundThrowError() {
+	public void testCreateEvent_whenPartnerDoesntExists_ShouldThrowError() {
 		// given
-		final var expectedName = "Disney on Ice";
 		final var expectedDate = "2021-01-01";
-		final var expectedTotalSpots = 100;
-		final var expectedPartnerId = TSID.fast().toLong();
+		final var expectedName = "Disney on Ice";
+		final var expectedTotalSpots = 10;
+		final var expectedPartnerId = PartnerId.unique().value();
 		final var expectedError = "Partner not found";
 
 		final var createInput = new CreateEventUseCase.Input(expectedDate, expectedName, expectedPartnerId, expectedTotalSpots);
 
 		// when
-		final var useCase = new CreateEventUseCase(eventService, partnerService);
 		final var actualException = Assertions.assertThrows(ValidationException.class, () -> useCase.execute(createInput));
 
 		// then
@@ -84,11 +72,7 @@ class CreateEventUseCaseIT extends IntegrationTest {
 	}
 
 	private Partner createPartner() {
-		final var partner = new Partner();
-		partner.setCnpj("1234567891");
-		partner.setEmail("partner@gmail.com");
-		partner.setName("Partner");
-		return partnerRepository.save(partner);
+		return partnerRepository.create(Partner.newPartner("John Doe", "41.536.538/0001-00", "john.doe@gmail.com"));
 	}
 
 }

@@ -1,5 +1,5 @@
 package br.com.fullcycle.hexagonal.infraestructure.dtos;
 
-public record SubscribeDTO(Long customerId) {
+public record SubscribeDTO(String customerId) {
 
 }

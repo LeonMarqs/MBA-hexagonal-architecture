@@ -30,8 +30,7 @@ public class PartnerController {
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody CreatePartnerDTO dto) {
 		try {
-			final var output = createPartnerUseCase.execute(
-					new CreatePartnerUseCase.Input(dto.cnpj(), dto.email(), dto.name()));
+			final var output = createPartnerUseCase.execute(new CreatePartnerUseCase.Input(dto.cnpj(), dto.email(), dto.name()));
 
 			return ResponseEntity.created(URI.create("/partners/" + output.id())).body(output);
 
@@ -41,7 +40,7 @@ public class PartnerController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> get(@PathVariable Long id) {
+	public ResponseEntity<?> get(@PathVariable String id) {
 		return getPartnerByIdUseCase.execute(new GetPartnerByIdUseCase.Input(id)).map(ResponseEntity::ok)
 				.orElseGet(ResponseEntity.notFound()::build);
 	}

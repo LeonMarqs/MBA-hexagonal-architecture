@@ -1,21 +1,17 @@
 package br.com.fullcycle.hexagonal.application.usecases;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
+import br.com.fullcycle.hexagonal.application.repository.InMemoryPartnerRepository;
 import br.com.fullcycle.hexagonal.infraestructure.models.Partner;
 import br.com.fullcycle.hexagonal.infraestructure.repositories.PartnerRepository;
-import br.com.fullcycle.hexagonal.infraestructure.services.PartnerService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 import java.util.UUID;
-
-import static org.mockito.Mockito.when;
 
 class GetPartnerByIdUseCaseIT extends IntegrationTest {
 
@@ -36,13 +32,12 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 	public void testGetPartnerById() {
 		// given
 		final var aPartner = createPartner();
-		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(aPartner.getId());
+		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(aPartner.getId().toString());
 
 		// when
-		final var partnerService = Mockito.mock(PartnerService.class);
-		when(partnerService.findById(aPartner.getId())).thenReturn(Optional.of(aPartner));
+		final var partnerRepository = new InMemoryPartnerRepository();
 
-		final var useCase = new GetPartnerByIdUseCase(partnerService);
+		final var useCase = new GetPartnerByIdUseCase(partnerRepository);
 		final var output = useCase.execute(getByIdInput).get();
 
 		// then
@@ -58,7 +53,7 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 		// given
 		final Long expectedId = UUID.randomUUID().getMostSignificantBits();
 
-		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(expectedId);
+		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(expectedId.toString());
 
 		// when
 		final var output = useCase.execute(getByIdInput);
