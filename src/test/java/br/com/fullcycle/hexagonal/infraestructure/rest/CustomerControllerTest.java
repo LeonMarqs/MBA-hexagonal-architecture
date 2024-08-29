@@ -1,7 +1,7 @@
 package br.com.fullcycle.hexagonal.infraestructure.rest;
 
-import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase;
-import br.com.fullcycle.hexagonal.application.usecases.GetCustomerByIdUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.customer.CreateCustomerUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.customer.GetCustomerByIdUseCase;
 import br.com.fullcycle.hexagonal.infraestructure.dtos.NewCustomerDTO;
 import br.com.fullcycle.hexagonal.infraestructure.repositories.CustomerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

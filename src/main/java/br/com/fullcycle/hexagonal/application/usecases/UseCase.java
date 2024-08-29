@@ -1,4 +1,4 @@
-package br.com.fullcycle.hexagonal.application;
+package br.com.fullcycle.hexagonal.application.usecases;
 
 public abstract class UseCase<INPUT, OUTPUT> {
 	

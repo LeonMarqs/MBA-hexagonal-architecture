@@ -1,7 +1,7 @@
 package br.com.fullcycle.hexagonal.infraestructure.rest;
 
-import br.com.fullcycle.hexagonal.application.usecases.CreateEventUseCase;
-import br.com.fullcycle.hexagonal.application.usecases.SubscribeCustomerToEventUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.event.CreateEventUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.event.SubscribeCustomerToEventUseCase;
 import br.com.fullcycle.hexagonal.infraestructure.dtos.NewEventDTO;
 import br.com.fullcycle.hexagonal.infraestructure.dtos.SubscribeDTO;
 import org.springframework.http.ResponseEntity;

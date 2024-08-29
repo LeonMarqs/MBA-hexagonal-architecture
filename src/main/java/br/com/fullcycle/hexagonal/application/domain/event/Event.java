@@ -139,7 +139,7 @@ public class Event {
 
 	private void setPartnerId(final PartnerId partnerId) {
 		if (partnerId == null) {
-			throw new ValidationException("Invalid totalSpots for Event");
+			throw new ValidationException("Invalid partner ID for Event");
 		}
 
 		this.partnerId = partnerId;

@@ -1,13 +1,13 @@
-package br.com.fullcycle.hexagonal.application.usecases;
+package br.com.fullcycle.hexagonal.application.usecases.customer;
 
-import br.com.fullcycle.hexagonal.application.UseCase;
+import br.com.fullcycle.hexagonal.application.usecases.UseCase;
 import br.com.fullcycle.hexagonal.application.domain.customer.Customer;
 import br.com.fullcycle.hexagonal.application.domain.person.Cpf;
 import br.com.fullcycle.hexagonal.application.domain.person.Email;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.repositories.CustomerRepository;
-import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase.Input;
-import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase.Output;
+import br.com.fullcycle.hexagonal.application.usecases.customer.CreateCustomerUseCase.Input;
+import br.com.fullcycle.hexagonal.application.usecases.customer.CreateCustomerUseCase.Output;
 
 import java.util.Objects;
 

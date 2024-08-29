@@ -1,8 +1,8 @@
 package br.com.fullcycle.hexagonal.infraestructure.rest;
 
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.application.usecases.CreatePartnerUseCase;
-import br.com.fullcycle.hexagonal.application.usecases.GetPartnerByIdUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.partner.CreatePartnerUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.partner.GetPartnerByIdUseCase;
 import br.com.fullcycle.hexagonal.infraestructure.dtos.CreatePartnerDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
