@@ -1,8 +1,8 @@
 package br.com.fullcycle.hexagonal.application.usecases.customer;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
-import br.com.fullcycle.hexagonal.infraestructure.models.Customer;
-import br.com.fullcycle.hexagonal.infraestructure.repositories.CustomerRepository;
+import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.CustomerEntity;
+import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.CustomerJpaRepository;
 import io.hypersistence.tsid.TSID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 	private GetCustomerByIdUseCase useCase;
 
 	@Autowired
-	private CustomerRepository customerRepository;
+	private CustomerJpaRepository customerRepository;
 
 	@BeforeEach
 	void tearDown() {
@@ -60,8 +60,8 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 		Assertions.assertTrue(output.isEmpty());
 	}
 
-	private Customer createCustomer() {
-		final var customer = new Customer();
+	private CustomerEntity createCustomer() {
+		final var customer = new CustomerEntity();
 		customer.setCpf("1234567891");
 		customer.setEmail("john.doe@gmal.com");
 		customer.setName("John Doe");

@@ -2,8 +2,8 @@ package br.com.fullcycle.hexagonal.application.usecases.partner;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.infraestructure.models.Partner;
-import br.com.fullcycle.hexagonal.infraestructure.repositories.PartnerRepository;
+import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.PartnerEntity;
+import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.PartnerJpaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 	private CreatePartnerUseCase useCase;
 
 	@Autowired
-	private PartnerRepository partnerRepository;
+	private PartnerJpaRepository partnerRepository;
 
 	@BeforeEach
 	void tearDown() {
@@ -27,7 +27,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 	@DisplayName("Deve criar um parceiro")
 	public void testCreatePartner() {
 		// given
-		final String expectedCNPJ = "1234567891";
+		final String expectedCNPJ = "62.674.971/0001-74";
 		final String expectedEmail = "john.doe@gmal.com";
 		final String expectedName = "John Doe LTDA";
 
@@ -47,7 +47,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 	@DisplayName("Não deve cadastrar um parceiro com CNPJ duplicado")
 	public void testCreateWithDuplicatedCNPJShouldFail() {
 		// given
-		final String expectedCNPJ = "1234567891";
+		final String expectedCNPJ = "62.674.971/0001-74";
 		final String expectedEmail = "john.doe@gmal.com";
 		final String expectedName = "John Doe";
 		final String expectedError = "Partner already exists";
@@ -67,7 +67,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 	@DisplayName("Não deve cadastrar um parceiro com e-mail duplicado")
 	public void testCreateWithDuplicatedEmailShouldFail() {
 		// given
-		final String expectedCNPJ = "1234567891";
+		final String expectedCNPJ = "62.674.971/0001-74";
 		final String expectedEmail = "john.doe@gmal.com";
 		final String expectedName = "John Doe";
 		final String expectedError = "Partner already exists";
@@ -84,7 +84,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 	}
 
 	private void createPartner(final String cnpj, final String email) {
-		final var aPartner = new Partner();
+		final var aPartner = new PartnerEntity();
 		aPartner.setCnpj(cnpj);
 		aPartner.setName("John Doe");
 		aPartner.setEmail(email);

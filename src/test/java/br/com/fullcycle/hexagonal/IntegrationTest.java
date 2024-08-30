@@ -1,6 +1,6 @@
 package br.com.fullcycle.hexagonal;
 
-import br.com.fullcycle.hexagonal.infraestructure.Main;
+import br.com.fullcycle.hexagonal.infrastructure.Main;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 

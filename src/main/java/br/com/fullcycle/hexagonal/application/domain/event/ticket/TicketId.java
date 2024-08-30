@@ -1,8 +1,7 @@
 package br.com.fullcycle.hexagonal.application.domain.event.ticket;
 
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-
-import java.util.UUID;
+import io.hypersistence.tsid.TSID;
 
 public record TicketId(String value) {
 
@@ -13,14 +12,15 @@ public record TicketId(String value) {
 	}
 
 	public static TicketId unique() {
-		return new TicketId(UUID.randomUUID().toString());
+		return new TicketId(TSID.fast().toString());
 	}
 
 	public static TicketId with(final String value) {
 		try {
-			return new TicketId(UUID.fromString(value).toString());
+			return new TicketId(TSID.from(value).toString());
 		} catch (IllegalArgumentException ex) {
 			throw new ValidationException("Invalid value for TicketId");
 		}
 	}
+
 }

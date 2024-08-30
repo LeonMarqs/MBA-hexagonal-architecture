@@ -2,8 +2,9 @@ package br.com.fullcycle.hexagonal.application.usecases.partner;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
 import br.com.fullcycle.hexagonal.application.repository.InMemoryPartnerRepository;
-import br.com.fullcycle.hexagonal.infraestructure.models.Partner;
-import br.com.fullcycle.hexagonal.infraestructure.repositories.PartnerRepository;
+import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.PartnerEntity;
+import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.PartnerJpaRepository;
+import io.hypersistence.tsid.TSID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,15 +12,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.UUID;
-
 class GetPartnerByIdUseCaseIT extends IntegrationTest {
 
 	@Autowired
 	private GetPartnerByIdUseCase useCase;
 
 	@Autowired
-	private PartnerRepository partnerRepository;
+	private PartnerJpaRepository partnerRepository;
 
 	@BeforeEach
 	@AfterEach
@@ -51,7 +50,7 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 	@DisplayName("Deve obter vazio ao buscar por id inválido")
 	public void testGetPartnerByIdWithInvalidId() {
 		// given
-		final Long expectedId = UUID.randomUUID().getMostSignificantBits();
+		final TSID expectedId = TSID.fast();
 
 		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(expectedId.toString());
 
@@ -62,8 +61,8 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 		Assertions.assertTrue(output.isEmpty());
 	}
 
-	private Partner createPartner() {
-		final var aPartner = new Partner();
+	private PartnerEntity createPartner() {
+		final var aPartner = new PartnerEntity();
 		aPartner.setCnpj("1234567891");
 		aPartner.setName("John Doe LTDA");
 		aPartner.setEmail("johndoe@gmail.conm");
