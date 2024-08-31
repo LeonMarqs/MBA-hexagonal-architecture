@@ -1,9 +1,9 @@
 package br.com.fullcycle.hexagonal.infrastructure.rest;
 
+import br.com.fullcycle.hexagonal.application.repositories.CustomerRepository;
 import br.com.fullcycle.hexagonal.application.usecases.customer.CreateCustomerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.customer.GetCustomerByIdUseCase;
 import br.com.fullcycle.hexagonal.infrastructure.dtos.NewCustomerDTO;
-import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.CustomerJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ public class CustomerControllerTest {
     private ObjectMapper mapper;
 
     @Autowired
-    private CustomerJpaRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @AfterEach
     void tearDown() {
@@ -121,7 +121,7 @@ public class CustomerControllerTest {
     @DisplayName("Deve obter um cliente por id")
     public void testGet() throws Exception {
 
-		var customer = new NewCustomerDTO("123.456.789-01", "johndoe@gmail.com","John Doe");
+		var customer = new NewCustomerDTO("124.456.789-01", "johndoe2@gmail.com","John Doe");
 
         final var createResult = this.mvc.perform(
                         MockMvcRequestBuilders.post("/customers")

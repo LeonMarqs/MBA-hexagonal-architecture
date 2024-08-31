@@ -1,6 +1,8 @@
 package br.com.fullcycle.hexagonal.application.usecases.customer;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
+import br.com.fullcycle.hexagonal.application.domain.customer.Customer;
+import br.com.fullcycle.hexagonal.application.repositories.CustomerRepository;
 import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.CustomerEntity;
 import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.CustomerJpaRepository;
 import io.hypersistence.tsid.TSID;
@@ -16,7 +18,7 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 	private GetCustomerByIdUseCase useCase;
 
 	@Autowired
-	private CustomerJpaRepository customerRepository;
+	private CustomerRepository customerRepository;
 
 	@BeforeEach
 	void tearDown() {
@@ -27,19 +29,19 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 	@DisplayName("Deve buscar um cliente por id")
 	public void testGetCustomerById() {
 		// given
-		final String expectedCPF = "1234567891";
+		final String expectedCPF = "123.456.786-21";
 		final String expectedEmail = "john.doe@gmal.com";
 		final String expectedName = "John Doe";
 
 		final var customer = createCustomer();
 
-		final GetCustomerByIdUseCase.Input getByIdInput = new GetCustomerByIdUseCase.Input(customer.getId().toString());
+		final GetCustomerByIdUseCase.Input getByIdInput = new GetCustomerByIdUseCase.Input(customer.customerId().value());
 
 		// when
 		final var output = useCase.execute(getByIdInput).get();
 
 		// then
-		Assertions.assertEquals(customer.getId(), output.id());
+		Assertions.assertEquals(customer.customerId().value(), output.id());
 		Assertions.assertEquals(expectedCPF, output.cpf());
 		Assertions.assertEquals(expectedEmail, output.email());
 		Assertions.assertEquals(expectedName, output.name());
@@ -60,12 +62,13 @@ class GetCustomerByIdUseCaseIT extends IntegrationTest {
 		Assertions.assertTrue(output.isEmpty());
 	}
 
-	private CustomerEntity createCustomer() {
+	private Customer createCustomer() {
 		final var customer = new CustomerEntity();
-		customer.setCpf("1234567891");
+		customer.setCpf("123.456.786-21");
 		customer.setEmail("john.doe@gmal.com");
 		customer.setName("John Doe");
-		return customerRepository.save(customer);
+		customer.setId(TSID.fast());
+		return customerRepository.create(customer.toCustomer());
 	}
 
 }

@@ -4,6 +4,7 @@ import br.com.fullcycle.hexagonal.IntegrationTest;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.PartnerEntity;
 import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.PartnerJpaRepository;
+import io.hypersistence.tsid.TSID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -74,7 +75,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 
 		final CreatePartnerUseCase.Input createInput = new CreatePartnerUseCase.Input(expectedCNPJ, expectedEmail, expectedName);
 
-		createPartner("1234567892", expectedEmail);
+		createPartner("62.672.971/0001-74", expectedEmail);
 
 		// when
 		final var actualException = Assertions.assertThrows(ValidationException.class, () -> useCase.execute(createInput));
@@ -88,6 +89,7 @@ public class CreatePartnerUseCaseIT extends IntegrationTest {
 		aPartner.setCnpj(cnpj);
 		aPartner.setName("John Doe");
 		aPartner.setEmail(email);
+		aPartner.setId(TSID.fast());
 
 		partnerRepository.save(aPartner);
 	}

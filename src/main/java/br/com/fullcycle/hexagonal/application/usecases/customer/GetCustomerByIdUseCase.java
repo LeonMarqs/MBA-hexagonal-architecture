@@ -1,8 +1,8 @@
 package br.com.fullcycle.hexagonal.application.usecases.customer;
 
-import br.com.fullcycle.hexagonal.application.usecases.UseCase;
 import br.com.fullcycle.hexagonal.application.domain.customer.CustomerId;
 import br.com.fullcycle.hexagonal.application.repositories.CustomerRepository;
+import br.com.fullcycle.hexagonal.application.usecases.UseCase;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -25,8 +25,6 @@ public class GetCustomerByIdUseCase extends UseCase<GetCustomerByIdUseCase.Input
 	public record Input(String id) {
 
 	}
-
-	;
 
 	public record Output(String id, String cpf, String email, String name) {
 

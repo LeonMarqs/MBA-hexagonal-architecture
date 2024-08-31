@@ -1,9 +1,9 @@
 package br.com.fullcycle.hexagonal.application.usecases.partner;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
-import br.com.fullcycle.hexagonal.application.repository.InMemoryPartnerRepository;
+import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.PartnerEntity;
-import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.PartnerJpaRepository;
 import io.hypersistence.tsid.TSID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +18,7 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 	private GetPartnerByIdUseCase useCase;
 
 	@Autowired
-	private PartnerJpaRepository partnerRepository;
+	private PartnerRepository partnerRepository;
 
 	@BeforeEach
 	@AfterEach
@@ -31,19 +31,17 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 	public void testGetPartnerById() {
 		// given
 		final var aPartner = createPartner();
-		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(aPartner.getId().toString());
+		final GetPartnerByIdUseCase.Input getByIdInput = new GetPartnerByIdUseCase.Input(aPartner.partnerId().value());
 
 		// when
-		final var partnerRepository = new InMemoryPartnerRepository();
-
 		final var useCase = new GetPartnerByIdUseCase(partnerRepository);
 		final var output = useCase.execute(getByIdInput).get();
 
 		// then
-		Assertions.assertEquals(aPartner.getId(), output.id());
-		Assertions.assertEquals(aPartner.getCnpj(), output.cnpj());
-		Assertions.assertEquals(aPartner.getEmail(), output.email());
-		Assertions.assertEquals(aPartner.getName(), output.name());
+		Assertions.assertEquals(aPartner.partnerId().value(), output.id());
+		Assertions.assertEquals(aPartner.cnpj().value(), output.cnpj());
+		Assertions.assertEquals(aPartner.email().value(), output.email());
+		Assertions.assertEquals(aPartner.name().value(), output.name());
 	}
 
 	@Test
@@ -61,12 +59,13 @@ class GetPartnerByIdUseCaseIT extends IntegrationTest {
 		Assertions.assertTrue(output.isEmpty());
 	}
 
-	private PartnerEntity createPartner() {
+	private Partner createPartner() {
 		final var aPartner = new PartnerEntity();
-		aPartner.setCnpj("1234567891");
+		aPartner.setCnpj("62.674.971/0001-74");
 		aPartner.setName("John Doe LTDA");
-		aPartner.setEmail("johndoe@gmail.conm");
-		return partnerRepository.save(aPartner);
+		aPartner.setEmail("johndoe@gmail.com");
+		aPartner.setId(TSID.fast());
+		return partnerRepository.create(aPartner.toPartner());
 	}
 
 }
